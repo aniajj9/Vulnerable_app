@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from password_hashing import PasswordHash
+from utils.password_hashing import PasswordHash
 import json
 
 app = Flask(__name__)
