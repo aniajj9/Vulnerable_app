@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
+from password_hashing import PasswordHash
 import json
 
 app = Flask(__name__)
@@ -24,7 +25,7 @@ def login():
         user_data = load_user_data()
         
         # Check if the username exists in the loaded user data
-        if username in user_data and user_data[username] == password:
+        if username in user_data and password_hashing.verify_password(user_data[username], password):
             session['username'] = username
             return redirect(url_for('home'))
         else:
@@ -59,7 +60,8 @@ def register():
             error_message = "Username already exists. Please choose another username."
         else:
             # Add the new user to the user_data dictionary
-            user_data[username] = password
+            password_hash = password_hashing.hash_password(password)
+            user_data[username] = password_hash
             
             # Save the user_data dictionary to the database.json file
             with open('database.json', 'w') as db_file:
@@ -77,5 +79,9 @@ if __name__ == "__main__":
             user_data = json.load(db_file)
     except FileNotFoundError:
         pass
+
+    # Initialize password hashing
+    hashing_algorithm = "sha256"
+    password_hashing = PasswordHash(hashing_algorithm)
     
     app.run(debug=True)
