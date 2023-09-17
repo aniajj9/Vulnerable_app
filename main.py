@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, abort
 from utils.password_hashing import PasswordHash
 import json
 
@@ -38,7 +38,11 @@ def login():
 @app.route('/home', methods=['GET', 'POST'])
 @app.route('/home/<submenu>', methods=['GET', 'POST'])
 def home(submenu=None):
-    return render_template("home.html", submenu=submenu)
+    if submenu == None or 'a' in submenu:
+        return render_template("home.html", submenu=submenu)
+    else:
+        # Return a "Not Found" response
+        abort(404)
 
 @app.route('/logout')
 def logout():
