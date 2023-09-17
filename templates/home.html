@@ -9,10 +9,11 @@
     
     <!-- Check if submenu is defined and not empty -->
     {% if submenu %}
-        <p>Your CPR:  {{ submenu }}</p>
+        <p>Your CPR:  {{ cpr }}</p>
     {% endif %}
     
     <a href="{{ url_for('logout') }}">Logout</a>
-    <a href="{{ url_for('home', submenu='1234') }}">Show CPR</a>
+    <a href="{{ url_for('home', submenu=cpr) }}">Show CPR</a>
+    
 </body>
 </html>
