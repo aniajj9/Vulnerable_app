@@ -13,7 +13,7 @@
     {% endif %}
     
     <a href="{{ url_for('logout') }}">Logout</a>
-    <a href="{{ url_for('home', submenu=cpr) }}">Show CPR</a>
+    <a href="{{ url_for('home', submenu=session['username']) }}">Show CPR</a>
     
 </body>
 </html>

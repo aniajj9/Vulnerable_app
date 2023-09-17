@@ -50,14 +50,13 @@ def home(submenu=None):
             if submenu is None:
                 return render_template("home.html", submenu=submenu, cpr=user.cpr)
             else:
-                # Check if 'submenu' exists in the 'cpr' field of ANY user
-                matching_users = Users.query.filter(Users.cpr == submenu).all()
-                if matching_users:
-                    return render_template("home.html", submenu=submenu, cpr=user.cpr)
+                # Check if 'submenu' exists as a username
+                matching_user = Users.query.filter_by(username=submenu).first()
+                if matching_user:
+                    return render_template("home.html", submenu=submenu, cpr=matching_user.cpr)
     
-    # If no valid user or matching CPR is found, return a "Not Found" response
+    # If no valid user or matching username is found, return a "Not Found" response
     abort(404)
-
 
 
 @app.route('/logout')
