@@ -1,1 +1,0 @@
-git add * && git commit -m "%~1" && git push && "c:\Users\bduago\OneDrive - Bankdata\Skrivebord\git\Vuln-app\.venv\Scripts\python.exe" "c:\Users\bduago\OneDrive - Bankdata\Skrivebord\git\Vuln-app\main.py"
