@@ -51,6 +51,11 @@ def home(submenu=None):
         # Return a "Not Found" response
         abort(404)
 
+        username = session['username']
+        
+        # Retrieve the CPR of the currently logged-in user
+        current_user_cpr = user_data.get(username, {}).get('cpr', None)
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
