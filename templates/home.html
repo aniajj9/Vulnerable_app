@@ -6,6 +6,12 @@
 </head>
 <body>
     <h1>Welcome, {{ session['username'] }}</h1>
+    
+    <!-- Check if submenu is defined and not empty -->
+    {% if submenu %}
+        <p>You selected submenu: {{ submenu }}</p>
+    {% endif %}
+    
     <a href="{{ url_for('logout') }}">Logout.</a>
 </body>
 </html>

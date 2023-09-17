@@ -36,8 +36,9 @@ def login():
     
     
 @app.route('/home', methods=['GET', 'POST'])
-def home():
-    return render_template("home.html")
+@app.route('/home/<submenu>', methods=['GET', 'POST'])
+def home(submenu=None):
+    return render_template("home.html", submenu=submenu)
 
 @app.route('/logout')
 def logout():
