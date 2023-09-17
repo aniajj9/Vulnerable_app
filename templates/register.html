@@ -15,6 +15,7 @@
     <form method="POST" action="{{ url_for('register') }}">
         <input type="text" name="username" placeholder="Username"><br>
         <input type="password" name="password" placeholder="Password"><br>
+        <input type="text" name="cpr" placeholder="CPR"><br>
         <input type="submit" value="Register">
     </form>
     <a href="{{ url_for('login') }}">Login</a>

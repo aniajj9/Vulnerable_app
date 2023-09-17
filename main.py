@@ -15,23 +15,26 @@ def load_user_data():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error_message = None  # Initialize the error message as None
+    error_message = None
     
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         
-        # Load user data from the JSON file on each login attempt
+        # Load user data from the JSON file
         user_data = load_user_data()
         
         # Check if the username exists in the loaded user data
-        if username in user_data and password_hashing.verify_password(user_data[username], password):
+        if username in user_data and password_hashing.verify_password(user_data[username]["password_hash"], password):
             session['username'] = username
-            return redirect(url_for('home'))
+            # Retrieve the CPR for the logged-in user
+            cpr = user_data[username]["cpr"]
+            return render_template('home.html', cpr=cpr)
         else:
             error_message = "Invalid username or password. Please try again."
     
     return render_template('login.html', error_message=error_message)
+
 
     
     
@@ -39,8 +42,11 @@ def login():
 @app.route('/home/<submenu>', methods=['GET', 'POST'])
 def home(submenu=None):
     user_data = load_user_data()
-    if submenu is None or submenu in user_data:
+    if submenu is None:
         return render_template("home.html", submenu=submenu)
+    for username, user_info in user_data.items():
+        if 'cpr' in user_info and submenu == user_info['cpr']:
+            return render_template("home.html", submenu=submenu)
     else:
         # Return a "Not Found" response
         abort(404)
@@ -52,11 +58,12 @@ def logout():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    error_message = None  # Initialize the error message as None
+    error_message = None
     
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        cpr = request.form['cpr']
         
         # Load user data from the JSON file
         user_data = load_user_data()
@@ -67,7 +74,7 @@ def register():
         else:
             # Add the new user to the user_data dictionary
             password_hash = password_hashing.hash_password(password)
-            user_data[username] = password_hash
+            user_data[username] = {"password_hash": password_hash, "cpr": cpr}
             
             # Save the user_data dictionary to the database.json file
             with open('database.json', 'w') as db_file:
@@ -76,6 +83,7 @@ def register():
             return redirect(url_for('login'))
     
     return render_template('register.html', error_message=error_message)
+
 
 
 if __name__ == "__main__":
