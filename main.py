@@ -38,7 +38,8 @@ def login():
 @app.route('/home', methods=['GET', 'POST'])
 @app.route('/home/<submenu>', methods=['GET', 'POST'])
 def home(submenu=None):
-    if submenu == None or 'a' in submenu:
+    user_data = load_user_data()
+    if submenu is None or submenu in user_data:
         return render_template("home.html", submenu=submenu)
     else:
         # Return a "Not Found" response
