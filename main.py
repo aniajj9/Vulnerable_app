@@ -5,6 +5,7 @@ from utils.password_hashing import PasswordHash
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SESSION_COOKIE_HTTPONLY'] = False
 db = SQLAlchemy(app)
 
 # database model
@@ -14,6 +15,9 @@ class Users(db.Model):
     passwordHash = db.Column(db.String(200), nullable=False)
     cpr = db.Column(db.String(9), nullable=False)
 
+@app.route('/', methods=['GET', 'POST'])
+def default():
+    login()
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
