@@ -1,0 +1,51 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - scanner-test-vulnerable-app
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Log in to registry
+      uses: docker/login-action@v2
+      with:
+        registry: https://simplehttp.azurecr.io/
+        username: ${{ secrets.AzureAppService_ContainerUsername_da5638f3df6d4b8ebc06b0a93d8523f2 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_922d0cf92225409fa7591a4dacf11148 }}
+
+    - name: Build and push container image to registry
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        tags: simplehttp.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_da5638f3df6d4b8ebc06b0a93d8523f2 }}/helpfulerrors:${{ github.sha }}
+        file: ./Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'scanner-test-vulnerable-app'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_59dc3b3047b944cdac5360f2a1bc1c31 }}
+        images: 'simplehttp.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_da5638f3df6d4b8ebc06b0a93d8523f2 }}/helpfulerrors:${{ github.sha }}'
