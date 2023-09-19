@@ -2,7 +2,11 @@
 <html>
 <head>
     <title>Home</title>
+    {% if subsubmenu %}
+        <link rel="stylesheet" type="text/css" href="../../static/style.css">
+    {% else %}
     <link rel="stylesheet" type="text/css" href="../static/style.css">
+    {% endif %}
 </head>
 <body>
     <h1>Welcome, {{ session['username'] }}</h1>
@@ -11,9 +15,14 @@
     {% if submenu %}
         <p>Your CPR:  {{ cpr }}</p>
     {% endif %}
+
+    {% if subsubmenu %}
+        <p>Your password:  {{ password }}</p>
+    {% endif %}
     
     <a href="{{ url_for('logout') }}">Logout</a>
     <a href="{{ url_for('home', submenu=session['username']) }}">Show CPR</a>
+    <a href="{{ url_for('home', submenu=session['username'], subsubmenu=cpr) }}">Show password</a>
     
 </body>
 </html>

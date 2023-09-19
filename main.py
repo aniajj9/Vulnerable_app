@@ -41,19 +41,23 @@ def login():
   
 @app.route('/home', methods=['GET', 'POST'])
 @app.route('/home/<submenu>', methods=['GET', 'POST'])
-def home(submenu=None):
+@app.route('/home/<submenu>/<subsubmenu>', methods=['GET', 'POST'])
+def home(submenu=None, subsubmenu= None):
     username = session.get('username', None)
-    
     if username:
         user = Users.query.filter_by(username=username).first()
         if user:
             if submenu is None:
                 return render_template("home.html", submenu=submenu, cpr=user.cpr)
             else:
-                # Check if 'submenu' exists as a username
                 matching_user = Users.query.filter_by(username=submenu).first()
                 if matching_user:
-                    return render_template("home.html", submenu=submenu, cpr=matching_user.cpr)
+                    if subsubmenu is None:
+                        return render_template("home.html", submenu=submenu, cpr=matching_user.cpr)
+                    else:
+                        matching_user = Users.query.filter_by(cpr=subsubmenu).first()
+                        if matching_user:
+                            return render_template("home.html", submenu=submenu, subsubmenu=subsubmenu, password = matching_user.passwordHash, cpr=matching_user.cpr)
     
     # If no valid user or matching username is found, return a "Not Found" response
     abort(404)
