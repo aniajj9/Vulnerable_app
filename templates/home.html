@@ -28,7 +28,7 @@
     
     <a href="{{ url_for('logout') }}">Logout</a>
     <a href="{{ url_for('home', submenu=session['username']) }}">Show CPR</a>
-    <a href="{{ url_for('home', submenu=session['username'], subsubmenu=cpr) }}">Show password hash</a>
+    <a href="{{ url_for('home', submenu=submenu, subsubmenu=cpr) }}">Show password hash</a>
     
 </body>
 </html>
