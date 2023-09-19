@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from utils.password_hashing import PasswordHash
+import os
+
+os.system("pip install -r requirements.txt")
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
