@@ -13,11 +13,11 @@
     
     <!-- Check if submenu is defined and not empty -->
     {% if submenu %}
-        <p>Your CPR:  {{ cpr }}</p>
+        <p>User with username <b>{{ submenu }}</b>, your CPR is:  <b>{{ cpr }}</b></p>
     {% endif %}
 
     {% if subsubmenu %}
-        <p>Your password:  {{ password }}</p>
+        <p>User with CPR <b>{{ subsubmenu }}</b>, your password hash is:  <b>{{ password }}</b></p>
     {% endif %}
     
     <a href="{{ url_for('logout') }}">Logout</a>

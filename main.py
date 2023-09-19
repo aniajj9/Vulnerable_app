@@ -40,27 +40,28 @@ def login():
  
   
 @app.route('/home', methods=['GET', 'POST'])
-@app.route('/home/<submenu>', methods=['GET', 'POST'])
-@app.route('/home/<submenu>/<subsubmenu>', methods=['GET', 'POST'])
+@app.route('/home/<submenu>', methods=['GET', 'POST']) # Show cpr
+@app.route('/home/<submenu>/<subsubmenu>', methods=['GET', 'POST']) # Show password hash
 def home(submenu=None, subsubmenu= None):
     username = session.get('username', None)
     if username:
         user = Users.query.filter_by(username=username).first()
         if user:
             if submenu is None:
-                return render_template("home.html", submenu=submenu, cpr=user.cpr)
+                return render_template("home.html", submenu=submenu, cpr=user.cpr) # Basic home page
             else:
-                matching_user = Users.query.filter_by(username=submenu).first()
-                if matching_user:
+                matching_username = Users.query.filter_by(username=submenu).first() # If user with given username exists:
+                if matching_username:
                     if subsubmenu is None:
-                        return render_template("home.html", submenu=submenu, cpr=matching_user.cpr)
+                        return render_template("home.html", submenu=submenu, cpr=matching_username.cpr) # Display the existing user's (not necessarily logged in) cpr
                     else:
-                        matching_user = Users.query.filter_by(cpr=subsubmenu).first()
-                        if matching_user:
-                            return render_template("home.html", submenu=submenu, subsubmenu=subsubmenu, password = matching_user.passwordHash, cpr=matching_user.cpr)
+                        matching_cpr = Users.query.filter_by(cpr=subsubmenu).first() # If you also want the password hash, find user with selected cpr
+                        if matching_cpr:
+                            return render_template("home.html", submenu=submenu, subsubmenu=subsubmenu, password = matching_cpr.passwordHash, cpr=matching_username.cpr)
     
     # If no valid user or matching username is found, return a "Not Found" response
     abort(404)
+
 
 
 @app.route('/logout')
@@ -87,8 +88,7 @@ def register():
             password_hash = password_hashing.hash_password(password)
             new_user = Users(username=username, passwordHash=password_hash, cpr=cpr)
             db.session.add(new_user)
-            db.session.commit()
-            
+            db.session.commit()            
             return redirect(url_for('login'))
     
     return render_template('register.html', error_message=error_message)
@@ -102,6 +102,7 @@ def view_users():
 
 if __name__ == "__main__":
 
+    # Initialize database
     with app.app_context():
         db.create_all()
 
