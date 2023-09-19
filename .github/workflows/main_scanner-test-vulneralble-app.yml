@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'scanner-test-vulneralble-app'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DC6AC4FF0EB34676ACEF1872AAEA0912 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C47B5EB4151C4975A7DE3F9B143D4F2E }}
