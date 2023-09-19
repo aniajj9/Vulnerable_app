@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
-from utils.password_hashing import PasswordHash
 import hashlib
 import os
 
 os.system("pip install -r requirements.txt")
+
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -19,6 +19,28 @@ class Users(db.Model):
     username = db.Column(db.String(50), primary_key=True)
     passwordhash = db.Column(db.String(200), nullable=False)
     cpr = db.Column(db.String(9), nullable=False, unique=True)
+
+
+class PasswordHash:
+
+    def __init__(self, hash_algorithm) -> None:
+        self.__hash_algorithm = hash_algorithm
+
+    def hash_password(self, password):
+        # Hash the password using the specified algorithm
+        hash_obj = hashlib.new(self.__hash_algorithm)
+        hash_obj.update(password.encode('utf-8'))
+        return hash_obj.hexdigest()
+
+    def verify_password(self, hashed_password, password):
+        # Verify a password against its hashed version using the specified algorithm
+        return hashed_password == self.hash_password(password)
+    
+
+# Initialize password hashing
+hashing_algorithm = "sha256"
+password_hashing = PasswordHash(hashing_algorithm)
+
 
 @app.route('/', methods=['GET'])
 def default():
@@ -40,6 +62,7 @@ def login():
         user = Users.query.filter_by(username=username).first()
         
         # Check if the username exists in the loaded user data
+        #return render_template('login.html', error_message=f"{password}, {user.passwordhash}, {username}")
         if user and password_hashing.verify_password(user.passwordhash, password):
             session['username'] = username
             return redirect(url_for('home', submenu=None))  # Redirect to the "home" route 
@@ -112,15 +135,12 @@ def view_users():
     
     return render_template('view_users.html', users=users)
 
+
+
 if __name__ == "__main__":
 
     # Initialize database
     with app.app_context():
         db.create_all()
-
-
-    # Initialize password hashing
-    hashing_algorithm = "sha256"
-    password_hashing = PasswordHash(hashing_algorithm)
     
     app.run(debug=True)

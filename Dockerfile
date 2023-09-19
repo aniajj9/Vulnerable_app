@@ -1,17 +1,10 @@
-# Use an official Python runtime as a parent image
 FROM python:3.11
 
-# Set the working directory inside the container
-WORKDIR /app
+WORKDIR /python-docker
 
-# Copy the current directory contents into the container
-COPY . /app
+COPY requirements.txt requirements.txt
+RUN python -m pip install -r requirements.txt
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
 
-# Expose port 5000 (adjust this if your Flask app runs on a different port)
-EXPOSE 5000
-
-# Define the command to run your application
-CMD ["python", "app.py"]
+CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
