@@ -4,15 +4,16 @@ from utils.password_hashing import PasswordHash
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:oRCkbqqMy6Cg6wjZoKdI@localhost:5432/users'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@vulnappserver:oRCkbqqMy6Cg6wjZoKdI@vulnappserver.postgres.database.azure.com/postgres'
+
 app.config['SESSION_COOKIE_HTTPONLY'] = False
 db = SQLAlchemy(app)
 
 # database model
 class Users(db.Model):
-    id = db.Column(db.Integer)
     username = db.Column(db.String(50), primary_key=True)
-    passwordHash = db.Column(db.String(200), nullable=False)
+    passwordhash = db.Column(db.String(200), nullable=False)
     cpr = db.Column(db.String(9), nullable=False, unique=True)
 
 @app.route('/', methods=['GET'])
@@ -35,7 +36,7 @@ def login():
         user = Users.query.filter_by(username=username).first()
         
         # Check if the username exists in the loaded user data
-        if user and password_hashing.verify_password(user.passwordHash, password):
+        if user and password_hashing.verify_password(user.passwordhash, password):
             session['username'] = username
             return redirect(url_for('home', submenu=None))  # Redirect to the "home" route 
         else:
@@ -62,7 +63,7 @@ def home(submenu=None, subsubmenu= None):
                         return render_template("home.html", submenu=submenu, cpr=matching_username.cpr) # Display the existing user's (not necessarily logged in) cpr, IF WE DONT REQUEST TO SEE PASSWORD HASH
                     else:
                         if subsubmenu == matching_username.cpr: # Check if cpr belongs to the logged in user. if yes, display password hash
-                            return render_template("home.html", submenu=submenu, subsubmenu=subsubmenu, password = matching_username.passwordHash, cpr=matching_username.cpr)
+                            return render_template("home.html", submenu=submenu, subsubmenu=subsubmenu, password = matching_username.passwordhash, cpr=matching_username.cpr)
                         elif Users.query.filter_by(cpr = subsubmenu).first(): # If cpr doesnt belong to logged user, return verbose error
                             error_msg = f"Error. You tried to access information about user {submenu} (CPR: {matching_username.cpr}), but query returned information about user {Users.query.filter_by(cpr = subsubmenu).first().username} (CPR: {Users.query.filter_by(cpr = subsubmenu).first().cpr})"
                             return render_template("home.html", submenu=submenu, cpr=matching_username.cpr, error_message=error_msg)
@@ -93,7 +94,7 @@ def register():
         else:
             # Create a new user record and add it to the database
             password_hash = password_hashing.hash_password(password)
-            new_user = Users(username=username, passwordHash=password_hash, cpr=cpr)
+            new_user = Users(username=username, passwordhash=password_hash, cpr=cpr)
             db.session.add(new_user)
             db.session.commit()            
             return redirect(url_for('login'))
