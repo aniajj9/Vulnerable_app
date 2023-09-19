@@ -13,7 +13,7 @@ class Users(db.Model):
     id = db.Column(db.Integer)
     username = db.Column(db.String(50), primary_key=True)
     passwordHash = db.Column(db.String(200), nullable=False)
-    cpr = db.Column(db.String(9), nullable=False)
+    cpr = db.Column(db.String(9), nullable=False, unique=True)
 
 @app.route('/', methods=['GET'])
 def default():
