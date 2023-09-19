@@ -64,7 +64,8 @@ def home(submenu=None, subsubmenu= None):
                         if subsubmenu == matching_username.cpr: # Check if cpr belongs to the logged in user. if yes, display password hash
                             return render_template("home.html", submenu=submenu, subsubmenu=subsubmenu, password = matching_username.passwordHash, cpr=matching_username.cpr)
                         elif Users.query.filter_by(cpr = subsubmenu).first(): # If cpr doesnt belong to logged user, return verbose error
-                            return render_template("home.html", submenu=submenu, cpr=matching_username.cpr, error_message=f"Error. You tried to access cpr belonging to {submenu}, but query returned cpr belonging to {Users.query.filter_by(cpr = subsubmenu).first().username}")
+                            error_msg = f"Error. You tried to access cpr belonging to {submenu} (CPR: {matching_username.cpr}), but query returned cpr belonging to {Users.query.filter_by(cpr = subsubmenu).first().username} (CPR: {Users.query.filter_by(cpr = subsubmenu).first().cpr})"
+                            return render_template("home.html", submenu=submenu, cpr=matching_username.cpr, error_message=error_msg)
     
     # If no valid user or matching username is found, return a "Not Found" response
     abort(404)
