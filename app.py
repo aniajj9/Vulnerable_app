@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from utils.password_hashing import PasswordHash
+import hashlib
 import os
 
 os.system("pip install -r requirements.txt")
