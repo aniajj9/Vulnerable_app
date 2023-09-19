@@ -17,7 +17,9 @@ class Users(db.Model):
 
 @app.route('/', methods=['GET', 'POST'])
 def default():
-    login()
+    if session.get('username', None):
+        return redirect(url_for('home', submenu=None))
+    return redirect(url_for('login'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
