@@ -1,12 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, session, abort
 from flask_sqlalchemy import SQLAlchemy
 from utils.password_hashing import PasswordHash
+from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SESSION_COOKIE_HTTPONLY'] = False
 db = SQLAlchemy(app)
+# Enable Flask-Migrate commands "flask db init/migrate/upgrade" to work
+migrate = Migrate(app, db)
+
 
 # database model
 class Users(db.Model):
