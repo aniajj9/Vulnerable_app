@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Home</title>
-    {% if subsubmenu %}
+    {% if subsubmenu or error_message %}
         <link rel="stylesheet" type="text/css" href="../../static/style.css">
     {% else %}
     <link rel="stylesheet" type="text/css" href="../static/style.css">
@@ -16,13 +16,19 @@
         <p>User with username <b>{{ submenu }}</b>, your CPR is:  <b>{{ cpr }}</b></p>
     {% endif %}
 
-    {% if subsubmenu %}
-        <p>User with CPR <b>{{ subsubmenu }}</b>, your password hash is:  <b>{{ password }}</b></p>
+    <!-- Display the error message -->
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% else %}
+        <!-- Check if subsubmenu is defined and not empty -->
+        {% if subsubmenu %}
+            <p>User with CPR <b>{{ subsubmenu }}</b>, your password hash is:  <b>{{ password }}</b></p>
+        {% endif %}
     {% endif %}
     
     <a href="{{ url_for('logout') }}">Logout</a>
     <a href="{{ url_for('home', submenu=session['username']) }}">Show CPR</a>
-    <a href="{{ url_for('home', submenu=session['username'], subsubmenu=cpr) }}">Show password</a>
+    <a href="{{ url_for('home', submenu=session['username'], subsubmenu=cpr) }}">Show password hash</a>
     
 </body>
 </html>

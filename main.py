@@ -15,7 +15,7 @@ class Users(db.Model):
     passwordHash = db.Column(db.String(200), nullable=False)
     cpr = db.Column(db.String(9), nullable=False)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def default():
     if session.get('username', None):
         return redirect(url_for('home', submenu=None))
@@ -58,11 +58,12 @@ def home(submenu=None, subsubmenu= None):
                 matching_username = Users.query.filter_by(username=submenu).first() # If user with given username exists:
                 if matching_username:
                     if subsubmenu is None:
-                        return render_template("home.html", submenu=submenu, cpr=matching_username.cpr) # Display the existing user's (not necessarily logged in) cpr
+                        return render_template("home.html", submenu=submenu, cpr=matching_username.cpr) # Display the existing user's (not necessarily logged in) cpr, IF WE DONT REQUEST TO SEE PASSWORD HASH
                     else:
-                        matching_cpr = Users.query.filter_by(cpr=subsubmenu).first() # If you also want the password hash, find user with selected cpr
-                        if matching_cpr:
-                            return render_template("home.html", submenu=submenu, subsubmenu=subsubmenu, password = matching_cpr.passwordHash, cpr=matching_username.cpr)
+                        if subsubmenu == matching_username.cpr: # Check if cpr belongs to the logged in user. if yes, display password hash
+                            return render_template("home.html", submenu=submenu, subsubmenu=subsubmenu, password = matching_username.passwordHash, cpr=subsubmenu)
+                        elif Users.query.filter_by(cpr = subsubmenu).first(): # If cpr doesnt belong to logged user, return verbose error
+                            return render_template("home.html", submenu=submenu, cpr=matching_username.cpr, error_message=f"Error. User with username {username} tried to access information about {Users.query.filter_by(cpr = subsubmenu).first().username}")
     
     # If no valid user or matching username is found, return a "Not Found" response
     abort(404)
