@@ -37,14 +37,13 @@ def login():
         # Check if the username exists in the loaded user data
         if user and password_hashing.verify_password(user.passwordHash, password):
             session['username'] = username
-            cpr = user.cpr
-            return redirect(url_for('home', submenu=None))  # Redirect to the "home" route
-    
+            return redirect(url_for('home', submenu=None))  # Redirect to the "home" route 
         else:
             error_message = "Invalid username or password. Please try again."
     
     return render_template('login.html', error_message=error_message)
  
+
   
 @app.route('/home', methods=['GET', 'POST'])
 @app.route('/home/<submenu>', methods=['GET', 'POST']) # Show cpr
@@ -69,7 +68,6 @@ def home(submenu=None, subsubmenu= None):
     
     # If no valid user or matching username is found, return a "Not Found" response
     abort(404)
-
 
 
 @app.route('/logout')

@@ -14,6 +14,8 @@
     <!-- Check if submenu is defined and not empty -->
     {% if submenu %}
         <p>User with username <b>{{ submenu }}</b>, your CPR is:  <b>{{ cpr }}</b></p>
+    {% else %}
+        <p>&nbsp;</p>
     {% endif %}
 
     <!-- Display the error message -->
@@ -23,12 +25,17 @@
         <!-- Check if subsubmenu is defined and not empty -->
         {% if subsubmenu %}
             <p>User with CPR <b>{{ subsubmenu }}</b>, your password hash is:  <b>{{ password }}</b></p>
+        {% else %}
+            <p>&nbsp;</p>
         {% endif %}
     {% endif %}
     
-    <a href="{{ url_for('logout') }}">Logout</a>
-    <a href="{{ url_for('home', submenu=session['username']) }}">Show CPR</a>
-    <a href="{{ url_for('home', submenu=submenu, subsubmenu=cpr) }}">Show password hash</a>
+    
+    <p>&nbsp;</p>
+    <a href="{{ url_for('logout') }}" class="button">Logout</a>
+    <a href="{{ url_for('home', submenu=session['username']) }}" class="button">Show CPR</a>
+    <a href="{{ url_for('home', submenu=session['username'], subsubmenu=cpr) }}" class="button">Show password hash</a>
+    
     
 </body>
 </html>
