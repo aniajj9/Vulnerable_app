@@ -23,6 +23,8 @@ def default():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if session.get('username', None):
+        return redirect(url_for('home', submenu=None))
     error_message = None
     
     if request.method == 'POST':
