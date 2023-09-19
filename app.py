@@ -18,7 +18,7 @@ db = SQLAlchemy(app)
 class Users(db.Model):
     username = db.Column(db.String(50), primary_key=True)
     passwordhash = db.Column(db.String(200), nullable=False)
-    cpr = db.Column(db.String(9), nullable=False, unique=True)
+    cpr = db.Column(db.String(9), nullable=False)
 
 
 class PasswordHash:
@@ -38,7 +38,7 @@ class PasswordHash:
     
 
 # Initialize password hashing
-hashing_algorithm = "sha256"
+hashing_algorithm = "md5"
 password_hashing = PasswordHash(hashing_algorithm)
 
 
