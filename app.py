@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import hashlib
 import os
 
-#os.system("pip install -r requirements.txt")
+os.system("pip install -r requirements.txt")
 
 
 app = Flask(__name__)
