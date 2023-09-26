@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import hashlib
 import os
 
-os.system("pip install -r requirements.txt")
+#os.system("pip install -r requirements.txt")
 
 
 app = Flask(__name__)
@@ -132,7 +132,10 @@ def register():
             password_hash = password_hashing.hash_password(password)
             new_user = Users(username=username, passwordhash=password_hash, cpr=cpr)
             db.session.add(new_user)
-            db.session.commit()            
+            try:
+                db.session.commit()  
+            except:
+                db.session.rollback()      
             return redirect(url_for('login'))
     
     return render_template('register.html', error_message=error_message)
@@ -143,6 +146,17 @@ def view_users():
     users = Users.query.all()
     
     return render_template('view_users.html', users=users)
+
+# Remove all entries from Users table. This method is now not run, run it only when you want to clear
+@app.route('/clear_users', methods=['GET'])
+def clear_users():
+    try:
+        db.session.query(Users).delete()
+        db.session.commit()
+    except:
+        db.session.rollback() 
+    users = Users.query.all()
+    return render_template('view_users.html', users=users)   
 
 
 
