@@ -63,11 +63,14 @@ def login():
         
         # Check if the username exists in the loaded user data
         #return render_template('login.html', error_message=f"{password}, {user.passwordhash}, {username}")
-        if user and password_hashing.verify_password(user.passwordhash, password):
-            session['username'] = username
-            return redirect(url_for('home', submenu=None))  # Redirect to the "home" route 
+        if user:
+            if password_hashing.verify_password(user.passwordhash, password):
+                session['username'] = username
+                return redirect(url_for('home', submenu=None))  # Redirect to the "home" route 
+            else:
+                error_message = "Invalid password. Please try again."
         else:
-            error_message = "Invalid username or password. Please try again."
+            error_message = "Invalid username. Please try again."
     
     return render_template('login.html', error_message=error_message)
  
@@ -106,7 +109,7 @@ def logout():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    error_message = None
+    error_message = ""
     
     if request.method == 'POST':
         username = request.form['username']
@@ -117,7 +120,13 @@ def register():
         existing_user = Users.query.filter_by(username=username).first()
         
         if existing_user:
-            error_message = "Username already exists. Please choose another username."
+            error_message += "Username already exists. Please choose another username.  "
+
+        # Check if the cpr already exists in the database
+        existing_cpr = Users.query.filter_by(cpr=cpr).first()
+        
+        if existing_cpr:
+            error_message += "User with this CPR already exists."
         else:
             # Create a new user record and add it to the database
             password_hash = password_hashing.hash_password(password)
