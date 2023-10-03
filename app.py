@@ -97,6 +97,7 @@ def home(submenu=None, subsubmenu= None):
                         elif Users.query.filter_by(cpr = subsubmenu).first(): # If cpr doesnt belong to logged user, return verbose error
                             error_msg = f"Error. You tried to access information about user {submenu} (CPR: {matching_username.cpr}), but query returned information about user {Users.query.filter_by(cpr = subsubmenu).first().username} (CPR: {Users.query.filter_by(cpr = subsubmenu).first().cpr})"
                             return render_template("home.html", submenu=submenu, cpr=matching_username.cpr, error_message=error_msg)
+                        # TODO: else XSS subsubmenu
     
     # If no valid user or matching username is found, return a "Not Found" response
     abort(404)
