@@ -13,18 +13,18 @@
     
     <!-- Check if submenu is defined and not empty -->
     {% if submenu %}
-        <p>User with username <b>{{ submenu }}</b>, your CPR is:  <b>{{ cpr }}</b></p>
+        <p>User with username <b>{{ submenu|safe }}</b>, your CPR is:  <b>{{ cpr }}</b></p>
     {% else %}
         <p>&nbsp;</p>
     {% endif %}
 
     <!-- Display the error message -->
     {% if error_message %}
-        <p style="color: red;">{{ error_message }}</p>
+        <p style="color: red;">{{ error_message|safe }}</p>
     {% else %}
         <!-- Check if subsubmenu is defined and not empty -->
         {% if subsubmenu %}
-            <p>User with CPR <b>{{ subsubmenu }}</b>, your password hash is:  <b>{{ password }}</b></p>
+            <p>User with CPR <b>{{ subsubmenu|safe }}</b>, your password hash is:  <b>{{ password }}</b></p>
         {% else %}
             <p>&nbsp;</p>
         {% endif %}
