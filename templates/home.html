@@ -9,35 +9,83 @@
     {% endif %}
 </head>
 <body>
-    <h1>Welcome, {{ session['username'] }}</h1>
-    
-    <!-- Check if submenu is defined and not empty -->
-    {% if submenu %}
-        <p>User with username <b>{{ submenu|safe }}</b>, your CPR is:  <b>{{ cpr }}</b></p>
-    {% else %}
-        <p>&nbsp;</p>
-    {% endif %}
-
-    <!-- Display the error message -->
-    {% if error_message %}
-        <p style="color: red;">{{ error_message|safe }}</p>
-    {% else %}
-        <!-- Check if subsubmenu is defined and not empty -->
-        {% if subsubmenu %}
-            <p>User with CPR <b>{{ subsubmenu|safe }}</b>, your password hash is:  <b>{{ password }}</b></p>
+    <div id = "home-page-content">
+        <h1>Welcome, {{ session['username'] }}</h1>
+        
+        <!-- Check if submenu is defined and not empty -->
+        {% if submenu %}
+            <p>User with username <b>{{ submenu|safe }}</b>, your CPR is:  <b>{{ cpr }}</b></p>
         {% else %}
             <p>&nbsp;</p>
         {% endif %}
-    {% endif %}
 
-    
-    <p>&nbsp;</p>
-    <a href="{{ url_for('logout') }}" class="button">Logout</a>
-    <a href="{{ url_for('home', submenu=session['username']) }}" class="button">Show CPR</a>
-    <a href="{{ url_for('home', submenu=session['username'], subsubmenu=cpr) }}" class="button">Show password hash</a>
-    <br>
-    <img src="{{url_for('static', filename='house.png')}}" alt="Image of a house" width = "10%" style="padding-top: 20px;"/>
-    
+        <!-- Display the error message -->
+        {% if error_message %}
+            <p style="color: red;">{{ error_message|safe }}</p>
+        {% else %}
+            <!-- Check if subsubmenu is defined and not empty -->
+            {% if subsubmenu %}
+                <p>User with CPR <b>{{ subsubmenu|safe }}</b>, your password hash is:  <b>{{ password }}</b></p>
+            {% else %}
+                <p>&nbsp;</p>
+            {% endif %}
+        {% endif %}
+
+        
+        <p>&nbsp;</p>
+        <a href="{{ url_for('logout') }}" class="button">Logout</a>
+        <a href="{{ url_for('home', submenu=session['username']) }}" class="button">Show CPR</a>
+        <a href="{{ url_for('home', submenu=session['username'], subsubmenu=cpr) }}" class="button">Show password hash</a>
+        <br>
+        <img src="{{url_for('static', filename='house.png')}}" alt="Image of a house" width = "10%" style="padding-top: 20px;"/>
+    </div>
+    <div id = "additional-home-page-content">
+        <h2>Additional Home Page Content</h2>
+        <div id = "even-more-on-kubernetes">
+            <p>Use the Bash environment in Azure Cloud Shell. For more information, see Quickstart for Bash in Azure Cloud Shell.
+
+
+
+                If you prefer to run CLI reference commands locally, install the Azure CLI. If you're running on Windows or macOS, consider running Azure CLI in a Docker container. For more information, see How to run the Azure CLI in a Docker container.
+                
+                If you're using a local installation, sign in to the Azure CLI by using the az login command. To finish the authentication process, follow the steps displayed in your terminal. For other sign-in options, see Sign in with the Azure CLI.
+                
+                When you're prompted, install the Azure CLI extension on first use. For more information about extensions, see Use extensions with the Azure CLI.
+                
+                Run az version to find the version and dependent libraries that are installed. To upgrade to the latest version, run az upgrade.
+                
+                This article requires Azure CLI version 2.0.64 or later. If you're using Azure Cloud Shell, the latest version is already installed.
+                
+                Make sure the identity you use to create your cluster has the appropriate minimum permissions. For more details on access and identity for AKS, see Access and identity options for Azure Kubernetes Service (AKS).
+                
+                If you have multiple Azure subscriptions, select the appropriate subscription ID in which the resources should be billed using the az account command.
+                
+                Verify you have the Microsoft.OperationsManagement and Microsoft.OperationalInsights providers registered on your subscription. These Azure resource providers are required to support Container insights. Check the registration status using the following commands:</p>
+        </div>
+        <div id="interactions">
+            <h1>Input Form Example</h1>
+            <form id="myForm">
+                <label for="inputText">Enter Text:</label>
+                <input type="text" id="inputText" name="inputText">
+                <button type="button" id="submitButton">Submit</button>
+            </form>
+            <br>
+            <p>Value entered: <span id="outputText"></span></p>
+        
+            <script>
+                // Get references to the form elements
+                const inputField = document.getElementById('inputText');
+                const submitButton = document.getElementById('submitButton');
+                const outputField = document.getElementById('outputText');
+        
+                // Add a click event listener to the button
+                submitButton.addEventListener('click', function () {
+                    const inputValue = inputField.value;
+                    outputField.textContent = inputValue;
+                });
+            </script>
+        </div>
+    </div>
     
 </body>
 </html>
