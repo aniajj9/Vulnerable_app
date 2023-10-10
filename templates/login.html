@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="../static/style.css">
 </head>
 <body>
-    <h1>Login</h1>
+    <h1 class="login-title">Login</h1>
     
     <!-- Display the error message -->
     {% if error_message %}
@@ -20,5 +20,6 @@
     <a href="{{ url_for('register') }}">Register</a>
     <br>
     <img src="{{url_for('static', filename='key.png')}}" alt="Image of a key" width = "10%" style="padding-top: 10px;"/>
+    <img src="{{url_for('static', filename='lock.png')}}" alt="Image of a key" width = "7%" style="padding-top: 10px;"/>
 </body>
 </html>

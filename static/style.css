@@ -10,6 +10,10 @@ h1 {
     color: #333;
 }
 
+.login-title {
+    color: #7b00ef; /* Change to the color you want, for example, red (#FF0000) */
+}
+
 a[href*="register"] {
     margin-top: 20px; /* Adjust the value to control the amount of space above the link */
     display: inline-block; /* This ensures that the margin is applied properly */
@@ -52,6 +56,7 @@ a[href*="home"] {
     cursor: pointer;
     text-decoration: none;
 }
+
 
 input[type="submit"]:hover,
 a[href*="logout"]:hover ,
