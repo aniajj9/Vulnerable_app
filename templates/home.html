@@ -29,12 +29,14 @@
             <p>&nbsp;</p>
         {% endif %}
     {% endif %}
-    
+
     
     <p>&nbsp;</p>
     <a href="{{ url_for('logout') }}" class="button">Logout</a>
     <a href="{{ url_for('home', submenu=session['username']) }}" class="button">Show CPR</a>
     <a href="{{ url_for('home', submenu=session['username'], subsubmenu=cpr) }}" class="button">Show password hash</a>
+    <br>
+    <img src="{{url_for('static', filename='house.png')}}" alt="Image of a house" width = "10%" style="padding-top: 20px;"/>
     
     
 </body>

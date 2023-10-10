@@ -161,8 +161,6 @@ def clear_users():
     users = Users.query.all()
     return render_template('view_users.html', users=users)   
 
-
-
 if __name__ == "__main__":
 
     # Initialize database
@@ -170,3 +168,4 @@ if __name__ == "__main__":
         db.create_all()
     
     app.run(debug=True)
+
