@@ -9,8 +9,8 @@ os.system("pip install -r requirements.txt")
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:oRCkbqqMy6Cg6wjZoKdI@localhost:5432/users'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@vulnappserver:oRCkbqqMy6Cg6wjZoKdI@vulnappserver.postgres.database.azure.com/postgres'
-
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@vulnappserver:oRCkbqqMy6Cg6wjZoKdI@vulnappserver.postgres.database.azure.com/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SESSION_COOKIE_HTTPONLY'] = False
 db = SQLAlchemy(app)
 
